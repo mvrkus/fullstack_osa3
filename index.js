@@ -1,3 +1,4 @@
+const { request, response } = require('express')
 const express = require('express')
 const app = express()
 
@@ -23,10 +24,25 @@ let persons = [
         "name": "wwwww",
         "number": "asdd",
         "id": 4
+      },
+      {
+        "name": "Enselmi esimerkki",
+        "number": "020202",
+        "id": 5
       }
 ]
 
+app.get('/info', (req, res) => {
 
+    const ytLkm = persons.length
+    console.log(persons.length);
+    
+    const pyyntoAika = new Date()
+    console.log(pyyntoAika);
+    
+    res.send(`<div>The phonebook has info for ${ytLkm} people</div>
+    <div> ${pyyntoAika}</div>`)
+})
 
 app.get('/api/persons', (req, res) => {
   res.json(persons)
