@@ -29,6 +29,11 @@ let persons = [
         "name": "Enselmi esimerkki",
         "number": "020202",
         "id": 5
+      },
+      {
+        "name": "E esim",
+        "number": "02",
+        "id": 6
       }
 ]
 
@@ -72,8 +77,20 @@ app.post('/api/persons', (req, res) => {
   console.log(body);
 
   if (!body.name) {
-    return response.status(400).json({
-      error: 'sisältö puuttuu'
+    return res.status(400).json({
+      error: 'nimi puuttuu'
+    })
+  }
+
+  if (!body.number) {
+    return res.status(400).json({
+      error: 'numero puuttuu'
+    })
+  }
+
+  if (findSameName(body.name)) {
+    return res.status(400).json({
+      error: 'nimi on jo luettelossa'
     })
   }
   
@@ -88,6 +105,14 @@ app.post('/api/persons', (req, res) => {
 
   res.json(person)
 })
+
+const findSameName = (tarkistettava) => {
+  if (persons.find(person => person.name === tarkistettava)) {
+    return true
+  }
+  return false
+} 
+
 
 const PORT = 3001
 app.listen(PORT, () => {
