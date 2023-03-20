@@ -1,8 +1,15 @@
 const { request, response } = require('express')
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :param'))
+
+morgan.token('param', function(req, res, param) {
+  return JSON.stringify(req.body);
+});
+
 
 let persons = [
     {
@@ -74,7 +81,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  console.log(body);
+  //console.log(body);
 
   if (!body.name) {
     return res.status(400).json({
@@ -99,7 +106,7 @@ app.post('/api/persons', (req, res) => {
     number: body.number,
     id: Math.floor(Math.random() * 1000000)
   }
-  console.log(person.id);
+  //console.log(person.id);
   
   persons = persons.concat(person)
 
