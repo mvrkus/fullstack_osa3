@@ -2,9 +2,11 @@ const { request, response } = require('express')
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :param'))
+app.use(cors())
 
 morgan.token('param', function(req, res, param) {
   return JSON.stringify(req.body);
@@ -23,26 +25,13 @@ let persons = [
         "id": 2
       },
       {
-        "name": "sdffff",
+        "name": "sdf",
         "number": "22",
         "id": 3
-      },
-      {
-        "name": "wwwww",
-        "number": "asdd",
-        "id": 4
-      },
-      {
-        "name": "Enselmi esimerkki",
-        "number": "020202",
-        "id": 5
-      },
-      {
-        "name": "E esim",
-        "number": "02",
-        "id": 6
       }
 ]
+
+
 
 app.get('/info', (req, res) => {
 
