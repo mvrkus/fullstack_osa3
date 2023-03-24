@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/persons
+POST https://rough-flower-2130.fly.dev/api/persons
 Content-Type: application/json
 
 {
