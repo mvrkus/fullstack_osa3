@@ -52,8 +52,14 @@ const unknownEndpoint = (req, res) => {
 ]*/
 
 app.get('/info', (req, res) => {
-    res.send(`<div>The phonebook has info for people</div>
-    <div>Tähän pyyntöaika</div>`)
+    const date = new Date()
+    
+    Person.countDocuments({})
+    .then(count => {
+      res.send(`<div>The phonebook has info for ${count} people</div>
+        <div>${date}</div>`)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons', (req, res) => {
@@ -74,23 +80,24 @@ app.get('/api/persons/:id', (req, res, next) => {
   .catch(error => next(error))
 })
 
-/app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  res.status(204).end()
+/app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
   
-  if (body.name === undefined) {
+  if (body.name === "") {
     return res.status(400).json({
       error: 'nimi puuttuu'
     })
   }
 
-  if (body.number === undefined) {
+  if (body.number === "") {
     return res.status(400).json({
       error: 'numero puuttuu'
     })
@@ -99,7 +106,9 @@ app.post('/api/persons', (req, res) => {
   /*if (findSameName(body.name)) {
     return res.status(400).json({
       error: 'nimi on jo luettelossa'
+
     })
+    
   }*/
   
   const person = new Person({
@@ -114,11 +123,34 @@ app.post('/api/persons', (req, res) => {
 })
 
 /*const findSameName = (tarkistettava) => {
-  if (persons.find(person => person.name === tarkistettava)) {
+  if (tarkistettava === 't') {
     return true
   }
   return false
 }*/
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  console.log(body)
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+  
+  if (body.number === "") {
+    return res.status(400).json({
+      error: 'numero puuttuu'
+    })
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    .then(updatedContact => {
+      response.json(updatedContact)
+    })
+    .catch(error => next(error))
+})
+
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
