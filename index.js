@@ -33,26 +33,6 @@ const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint'})
 }
 
-
-
-/*let persons = [
-    {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 1
-      },
-      {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 2
-      },
-      {
-        "name": "sdf",
-        "number": "22",
-        "id": 3
-      }
-]*/
-
 app.get('/info', (req, res) => {
     const date = new Date()
 

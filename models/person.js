@@ -23,7 +23,11 @@ const personSchema = new mongoose.Schema({
    },
    number: {
     type: String,
-    minlength: 3,
+    validate: {
+        validator: function(v) {
+            return /^[0-9]{2,3}-[0-9]{7,}$/.test(v);
+        }
+    }, message: props => `${props.value} The number does not fill the requirements`,
     required: true
    }
 })
